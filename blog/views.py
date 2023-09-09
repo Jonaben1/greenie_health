@@ -12,7 +12,7 @@ class BlogList(ListView):
     template_name = 'home.html'
     paginate_by = 2
 
-    @cached_property
+#    @cached_property
     def get_queryset(self):
         # get the base queryset
         queryset = Post.objects.filter(status=1).order_by('-created_on').select_related('author')
@@ -26,9 +26,24 @@ class BlogList(ListView):
             queryset = queryset.filter(created_on__date=date)
         return queryset
 
+    def get(self, request, *args, **kwargs):
+        # check if the request is an AJAX request
+        if is_ajax(request):
+            # get the list of posts as a queryset
+            posts = self.get_queryset()
+            # convert the queryset into a list of dictionaries
+            data = list(posts.values('title', 'image_url', 'detail_url'))
+            # return a JSON response with the data
+            return JsonResponse(data, safe=False)
+        else:
+            # otherwise, use the default get method of the ListView class
+            return super().get(request, *args, **kwargs)
 
 
-@cache_page(60 * 15)
+def is_ajax(request):
+    return request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+
+#@cache_page(60 * 15)
 def blog_detail(request, slug):
     post = get_object_or_404(Post.objects.select_related('author'), slug=slug)
     comments = post.comments.filter(active=True)
@@ -51,21 +66,6 @@ def blog_detail(request, slug):
     return render(request, 'blog_detail.html', context)
 
 
-
-def blog_list(request):
-    # Get the list of posts as a queryset
-    posts = Post.objects.filter(status=1).order_by('-created_on').select_related('author')
-    # Filter by category and date if provided
-    category = request.GET.get('category')
-    if category:
-        posts = posts.filter(categories__name=category)
-    date = request.GET.get('date')
-    if date:
-        posts = posts.filter(created_on__date=date)
-    # Convert the queryset into a list of dictionaries
-    data = list(posts.values('title', 'image_url', 'detail_url'))
-    # Return a JSON response with the data
-    return JsonResponse(data, safe=False)
 
 
 

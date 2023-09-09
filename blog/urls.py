@@ -13,7 +13,6 @@ sitemaps = {
 
 urlpatterns = [
     path('', BlogList.as_view(), name='home'),
-    path('blog-list/', blog_list, name='blog_list'),
     path('<slug:slug>/', blog_detail, name='blog_detail'),
     path('ckeditor/new_post/', CreateBlogPost, name='create'),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),

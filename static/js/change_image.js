@@ -4,7 +4,7 @@ var container = document.querySelector(".row");
 // Define a function that fetches the list of posts and updates the elements
 function changePosts() {
   // Make a fetch request to the Django view that returns the list of posts as JSON
-  fetch("/blog-list/")
+  fetch("/")
     .then(response => response.json())
     .then(data => {
       // Clear the container element
