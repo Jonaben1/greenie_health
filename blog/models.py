@@ -9,8 +9,8 @@ from django.utils.safestring import mark_safe
 
 
 STATUS = (
-    (0, 'Draft'),
-    (1, 'Publish')
+    ('0', 'Draft'),
+    ('1', 'Publish')
 )
 
 class Category(models.Model):
@@ -63,7 +63,7 @@ class Post(models.Model):
         constraints = [
             models.CheckConstraint(
                 name='status_in_choices',
-                check=Q(status__in=[s[0] for s in STATUS]),
+                check=Q(status__in=['0','1']),
            ),
         ]
 
