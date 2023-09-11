@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'ckeditor',
     'compressor',
+    # 'imagekit',
     # redirects
     'django.contrib.redirects',
     # sitemaps
@@ -90,8 +91,12 @@ CKEDITOR_CONFIGS = {
 
        },
 }
-
-
+# set the backend for django-ckeditor
+CKEDITOR_UPLOAD_BACKEND = 'ckeditor_uploader.backends.pillow_backend'
+# enable jpeg compression for uploaded images
+CKEDITOR_FORCE_JPEG_COMPRESSION = True
+# set the image quality, on a scale from 1 (worst) to 95 (best)
+CKEDITOR_IMAGE_QUALITY = 50 # adjust as needed
 
 TEMPLATES = [
     {
@@ -169,7 +174,12 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    # compressing static files (CSS, JavaScript)
+    'compressor.finders.CompressorFinder',
 ]
+# compressing static files
+COMPRESS_ENABLED = True
+
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -179,6 +189,3 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# compressing static files
-STATICFILES_FINDERS = ['compressor.finders.CompressorFinder',]
-COMPRESS_ENABLED = True

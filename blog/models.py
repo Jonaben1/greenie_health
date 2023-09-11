@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from django.db.models import Q
 from django.utils.safestring import mark_safe
+from PIL import Image
 
 # Create your models here.
 
@@ -45,7 +46,7 @@ class Post(models.Model):
     last_modified = models.DateTimeField(
         auto_now=True
     )
-    images = models.ImageField(upload_to='images', blank=True)
+    image = models.ImageField(upload_to='images', blank=True)
     keywords = models.TextField(max_length=300, default='Some keywords')
     description = models.TextField(max_length=300, default='Article description')
     categories = models.ManyToManyField(
@@ -77,8 +78,8 @@ class Post(models.Model):
         return reverse('blog_detail', kwargs=({'slug': self.slug}))
 
     def image_tag(self):
-        if self.images:
-            return mark_safe(f'<img src="{self.images.url}" width="150" height="150">')
+        if self.image:
+            return mark_safe(f'<img src="{self.image.url}" width="150" height="150">')
         else:
             return 'No Image Found'
     image_tag.short_description = 'Image'
@@ -110,3 +111,20 @@ class Contact(models.Model):
     def __str__(self):
         return self.name
 
+
+
+
+'''# models.py
+from django.db import models
+from imagekit.models import ProcessedImageField
+from imagekit.processors import ResizeToFill
+
+class Post(models.Model):
+    # other fields
+    images = ProcessedImageField(
+        upload_to='images', # where to save the images
+        processors=[ResizeToFill(300, 300)], # resize the images to 300x300 pixels
+        format='JPEG', # save the images as JPEG format
+        options={'quality': 60}, # adjust the quality as needed
+    )
+'''

@@ -9,35 +9,9 @@ from django.utils.functional import cached_property
 
 
 class BlogList(ListView):
+    queryset = Post.objects.filter(status=1).order_by('-created_on').select_related('author')
     template_name = 'home.html'
     paginate_by = 2
-
-    @cached_property
-    def get_queryset(self):
-        # get the base queryset
-        queryset = Post.objects.filter(status=1).order_by('-created_on').select_related('author')
-        # filter by category if provided
-        category = self.request.GET.get('category')
-        if category:
-            queryset = queryset.filter(categories__name=category)
-        # filter by date if provided
-        date = self.request.GET.get('date')
-        if date:
-            queryset = queryset.filter(created_on__date=date)
-        return queryset
-
-    def get(self, request, *args, **kwargs):
-        # check if the request is an AJAX request
-        if is_ajax(request):
-            # get the list of posts as a queryset
-            posts = self.get_queryset()
-            # convert the queryset into a list of dictionaries
-            data = list(posts.values('title', 'image_url', 'detail_url'))
-            # return a JSON response with the data
-            return JsonResponse(data, safe=False)
-        else:
-            # otherwise, use the default get method of the ListView class
-            return super().get(request, *args, **kwargs)
 
 
 def is_ajax(request):
