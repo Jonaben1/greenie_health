@@ -12,7 +12,7 @@ class BlogList(ListView):
     template_name = 'home.html'
     paginate_by = 2
 
-#    @cached_property
+    @cached_property
     def get_queryset(self):
         # get the base queryset
         queryset = Post.objects.filter(status=1).order_by('-created_on').select_related('author')
