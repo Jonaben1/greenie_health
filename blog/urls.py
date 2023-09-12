@@ -1,4 +1,4 @@
-from .views import *
+from .views import BlogList, blog_detail, contact, about, CreateBlogPost
 from django.urls import path
 from .sitemaps import PostSitemap
 from django.contrib.sitemaps.views import sitemap

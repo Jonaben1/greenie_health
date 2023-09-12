@@ -5,6 +5,8 @@ from django.urls import reverse
 from django.db.models import Q
 from django.utils.safestring import mark_safe
 from PIL import Image
+from meta.models import ModelMeta
+
 
 # Create your models here.
 
@@ -23,7 +25,7 @@ class Category(models.Model):
         verbose_name_plural = 'Categories'
 
 
-class Post(models.Model):
+class Post(ModelMeta, models.Model):
     author = models.ForeignKey(User,
         on_delete=models.CASCADE,
         related_name='blog_posts',
@@ -47,8 +49,7 @@ class Post(models.Model):
         auto_now=True
     )
     image = models.ImageField(upload_to='images', blank=True)
-    keywords = models.TextField(max_length=300, default='Some keywords')
-    description = models.TextField(max_length=300, default='Article description')
+    meta_description = models.TextField(max_length=160, default='Article description')
     categories = models.ManyToManyField(
         'Category', related_name='post'
     )
@@ -58,6 +59,15 @@ class Post(models.Model):
         db_index=True,
     )
 
+
+    # define the meta attribute for each posts
+    _metadata = {
+        'title': 'title',
+        'description': 'meta_description',
+        'image': 'get_image',
+        'url': 'get_absolute_url',
+        'og_image_alt': 'get_image_alt',
+    }
 
     class Meta:
         ordering = ['-created_on']
@@ -83,6 +93,15 @@ class Post(models.Model):
         else:
             return 'No Image Found'
     image_tag.short_description = 'Image'
+
+    def get_image(self):
+        if self.image:
+            return self.image.url
+        else:
+            return None
+
+    def get_image_alt(self):
+        return f'A photo of {self.title}'
 
 
 class Comment(models.Model):

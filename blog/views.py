@@ -6,6 +6,7 @@ from django.http import HttpResponse, JsonResponse
 from django.views.decorators.cache import cache_page, cache_control
 from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
+from meta.views import get_meta
 
 
 class BlogList(ListView):
@@ -14,12 +15,11 @@ class BlogList(ListView):
     paginate_by = 2
 
 
-def is_ajax(request):
-    return request.headers.get('X-Requested-With') == 'XMLHttpRequest'
 
 #@cache_page(60 * 15)
 def blog_detail(request, slug):
     post = get_object_or_404(Post.objects.select_related('author'), slug=slug)
+    meta = get_meta(request, post)
     comments = post.comments.filter(active=True)
     new_comments = None
     if request.method == 'POST':
@@ -33,11 +33,12 @@ def blog_detail(request, slug):
         comment_form = CommentForm()
     context = {
         'post': post,
+        'meta': meta,
         'comments': comments,
         'new_comments': new_comments,
         'comment_form': comment_form
     }
-    return render(request, 'blog_detail.html', context)
+    return render(request, 'post_detail.html', context)
 
 
 

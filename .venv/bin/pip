@@ -1,4 +1,4 @@
-#!/home/okahjo/greenie_health/.venv/bin/python3
+#!/home/Jonaben/greenie_health/.venv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys

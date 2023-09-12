@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+<!--{% load cache %} -->
+{% load humanize %}
+
+{% block meta %}
+{{ meta }}
+{% endblock %}
+{% block content %}
+{% with post=post %}
+  <article class="media content-section">
+    <div class="media-body">
+      <div class="article-metadata">
+        <a class="mr-2" href="#">{{ object.author }}</a>
+        <small class="text-muted">{{ created_on|date:"F d, Y" }} {{ read_time }} Min read</small>
+      </div>
+      {% for category in categories.all %}
+        <p class="text-muted">{{ category.name }}</p>
+        {% endfor %}
+      <h2 class="article-title">{{ title }}</h2>
+      {% if image %} <!-- check if there is an image -->
+        <img src="{{ image.url }}" alt="{{ title }}" width="{{ image.width }}" height="{{ image.height }}"> <!-- display the image -->
+      {% endif %}
+      <p class="article-content">{{ body | safe }}</p>
+    </div>
+  </article>
+
+ <!--   {% cache 900 comments-{{ pk }} %} -->
+    <div class="col-md-8 card mb-4  mt-3 ">
+      <div class="card-body">
+        <!-- comments -->
+        <h2>{{ post.get_comment_count }} comments</h2>
+
+        {% for comment in comments %}
+        <div class="comments" style="padding: 10px;">
+          <p class="font-weight-bold">
+            {{ comment.name }}
+            <span class=" text-muted font-weight-normal">
+              {{ comment.created_on|naturaltime }}
+            </span>
+          </p>
+          {{ comment.body | linebreaks }}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+ <!-- {% endcache %} -->
+    <div class="col-md-8 card mb-4  mt-3 ">
+      <div class="card-body">
+      {% if new_comment %}
+        <div class="alert alert-success" role="alert">
+        Your comment will appear once approved
+        </div>
+        {% else %}
+        <h3>Leave a comment</h3>
+        <form method="post" style="margin-top: 1.3em;">
+          {{ comment_form | crispy }}
+          {% csrf_token %}
+          <button type="submit" class="btn btn-primary  btn-lg">Submit</button>
+        </form>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endwith %}
+{% endblock content %}
+

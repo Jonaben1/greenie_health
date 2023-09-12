@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'crispy_forms',
     'ckeditor',
     'compressor',
-    # 'imagekit',
+    'meta',
+    #imagekit',
     # redirects
     'django.contrib.redirects',
     # sitemaps
@@ -189,3 +190,13 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
+# meta configurations
+META_SITE_PROTOCOL = 'https'
+META_SITE_DOMAIN = 'jonaben.pythonanywhere.com'
+META_SITE_TYPE ='blog'
+META_USE_OG_PROPERTIES = True
+META_USE_TWITTER_PROPERTIES = True
+
+
+TEMPLATE_CONTEXT_PROCESSORS = 'meta.context_processors.meta'

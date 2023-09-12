@@ -7,10 +7,11 @@
     <title>{% block title %}Greenie Health{% endblock %}</title>
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet">
     <link href="{% static 'css/styles.css' %}" rel="stylesheet">
-    <meta name="google" content="notranslate" />
+<!--    <meta name="google" content="notranslate" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="{% block description %}This is my blog where I share my thoughts and opinions.{% endblock %}">
-    <meta name="robots" content="index, follow">
+    <meta name="robots" content="index, follow"> -->
+    {% include 'meta/meta.html' %}
     <!-- Bootstrap CDN links -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.1/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"></script>
