@@ -176,7 +176,7 @@ STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     # compressing static files (CSS, JavaScript)
-    'compressor.finders.CompressorFinder',
+  #  'compressor.finders.CompressorFinder',
 ]
 # compressing static files
 COMPRESS_ENABLED = True

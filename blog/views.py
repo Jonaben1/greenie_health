@@ -6,7 +6,6 @@ from django.http import HttpResponse, JsonResponse
 from django.views.decorators.cache import cache_page, cache_control
 from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
-from meta.views import get_meta
 
 
 class BlogList(ListView):
@@ -19,7 +18,7 @@ class BlogList(ListView):
 #@cache_page(60 * 15)
 def blog_detail(request, slug):
     post = get_object_or_404(Post.objects.select_related('author'), slug=slug)
-    meta = get_meta(request, post)
+    meta = post.as_meta()
     comments = post.comments.filter(active=True)
     new_comments = None
     if request.method == 'POST':

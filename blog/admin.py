@@ -3,7 +3,7 @@ from .models import Post, Category, Comment, Contact
 
 
 class PostAdmin(admin.ModelAdmin):
-    fields = ('author', 'title', 'slug', 'body', 'images', 'image_tag', 'keywords', 'meta_description', 'categories', 'status')
+    fields = ('author', 'title', 'slug', 'body', 'image', 'image_tag', 'meta_description', 'categories', 'status')
     list_display = ('title', 'slug', 'image_tag', 'status', 'created_on',)
     list_filter = ('status',)
     readonly_fields = ('image_tag',)
